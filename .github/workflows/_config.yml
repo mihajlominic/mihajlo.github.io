@@ -1,0 +1,5 @@
+title: My GitHub Pages Site
+description: A simple site hosted on GitHub Pages
+baseurl: "" # Leave this empty for user/organization sites. For project sites, set this to "/repository-name"
+url: "https://<username>.github.io" # Replace with your GitHub Pages URL
+theme: minima # Use a Jekyll theme available on GitHub Pages
