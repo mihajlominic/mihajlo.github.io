@@ -1,163 +1,143 @@
-const wrapper = document.getElementById("tiles");
+document.addEventListener('DOMContentLoaded', () => {
 
-const colors = [
-    "rgb(229, 57, 53)",
-    "rgb(253, 216, 53)",
-    "rgb(244, 81, 30)",
-    "rgb(76, 175, 80)",
-    "rgb(33, 150, 243)",
-    "rgb(156, 39, 176)"
-]
+    // --- 1. Scroll Fade-In Animation (Intersection Observer) ---
+    const faders = document.querySelectorAll('.fade-in');
 
-let columns = 0,
-    rows = 0;
+    const appearOptions = {
+        threshold: 0,
+        rootMargin: "0px 0px -200px 0px" // Start fade-in 100px before reaching viewport bottom
+    };
 
-let toggled = false;
+    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                return;
+            } else {
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            }
+        });
+    }, appearOptions);
 
-const handleOnClick = index => {
-   toggled = !toggled;
-
-   document.body.classList.toggle("toggled");
-    
-    anime({
-        targets: ".tile",
-        opacity: toggled ? 0 : 1,
-        delay: anime.stagger(50, {
-            grid: [columns, rows],
-            from: index
-        })
+    faders.forEach(fader => {
+        appearOnScroll.observe(fader);
     });
-};
 
+    // --- 3. Parallax Movement for Background Blobs ---
+    // Moves the background blobs slightly as the user scrolls
+    const blobContainer = document.querySelector('.blob-container');
+    const blobs = document.querySelectorAll('.blob');
+    const parallaxIntensity = 0.05;
 
-const createTile = index => {
-    const tile = document.createElement("div");
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
 
-    tile.classList.add("tile");
+        blobContainer.style.transform = `translateY(${scrollY * -parallaxIntensity}px)`;
 
-    tile.onclick = e => handleOnClick(index);
+        blobs.forEach((blob, index) => {
+            const depth = (index + 1) * 0.1; 
+            blob.style.transform = `translateY(${scrollY * depth * 0.5}px)`;
+        });
+    });
 
-    return tile;
-}
-
-const createTiles = quantity => {
-    Array.from(Array(quantity)).map((tile, index) => {
-        wrapper.appendChild(createTile(index));
-    })
-}
-
-const createGrid = () => {
-    wrapper.innerHTML = "";
-
-    columns = Math.floor(document.body.clientWidth / 20);
-    rows = Math.floor(document.body.clientHeight / 20);
-
-    wrapper.style.setProperty("--columns", columns);
-    wrapper.style.setProperty("--rows", rows);
-
-    createTiles(columns * rows);
-}
-
-createGrid();
-
-window.onresize = () => createGrid();
-
-
-const uploader = document.querySelector(".uploader");
-const fileInput = document.getElementById("file-input");
-const fileDisplay = document.querySelector(".file-display");
-const overlay = document.getElementById("input");
-const uploadBTN = document.querySelector(".upload");
-const clearButton = document.querySelector(".clear");
-
-// Add event listeners for drag & drop
-let dragCounter = 0;
-
-// Add event listeners for drag & drop
-document.addEventListener("dragenter", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounter++;
-    overlay.style.display = "flex";
 });
 
-document.addEventListener("dragleave", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounter--;
-    if (dragCounter === 0) {
-        overlay.style.display = "none";
+// ------------------------------
+// JS: artificial width animation
+// ------------------------------
+const cards = Array.from(document.querySelectorAll('.project-card'));
+const DURATION = 600; // ms
+
+// easing (easeOutCubic)
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+// animate width from currentPx -> targetPx over duration ms
+function animateWidthTo(card, targetPx, duration = DURATION) {
+  // cancel previous anim if exists
+  if (card._widthAnim) {
+    cancelAnimationFrame(card._widthAnim.raf);
+    card._widthAnim = null;
+  }
+
+  const parent = card.parentElement || document.body;
+  const startRect = card.getBoundingClientRect();
+  const startPx = startRect.width;
+  const delta = targetPx - startPx;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = Math.min(now - startTime, duration);
+    const t = elapsed / duration;
+    const eased = easeOutCubic(t);
+    const current = startPx + delta * eased;
+
+    // Use px for stable animation (avoids flex-basis fight)
+    card.style.width = `${current}px`;
+
+    if (elapsed < duration) {
+      card._widthAnim.raf = requestAnimationFrame(step);
+    } else {
+      // final snap to exact target
+      card.style.width = `${targetPx}px`;
+      card._widthAnim = null;
     }
-});
+  }
 
-document.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-});
-
-document.addEventListener("drop", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounter = 0; // Reset the counter on drop
-    overlay.style.display = "none";
-    const files = e.dataTransfer.files;
-    displayFiles(files);
-});
-
-// Handle file input click
-uploadBTN.addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", () => {
-    const files = fileInput.files;
-    displayFiles(files);
-});
-
-// Function to display files
-function displayFiles(files) {
-    Array.from(files).forEach(file => {
-        if (file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const div = document.createElement("div");
-                div.classList.add("file-info");
-                div.innerHTML = `
-                    <button class="remove-file" title="Remove file">&times;</button>
-                    <img src="${e.target.result}" alt="${file.name}" />
-                    <p>${file.name}</p>
-                `;
-                fileDisplay.appendChild(div);
-
-                // Add click event for the remove button
-                const removeButton = div.querySelector(".remove-file");
-                removeButton.addEventListener("click", (e) => {
-                    e.stopPropagation(); // Prevent triggering parent click events
-                    div.remove();
-                });
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const div = document.createElement("div");
-            div.classList.add("file-info");
-            div.innerHTML = `
-                <button class="remove-file" title="Remove file">&times;</button>
-                <p>${file.name}</p>
-            `;
-            fileDisplay.appendChild(div);
-
-            // Add click event for the remove button
-            const removeButton = div.querySelector(".remove-file");
-            removeButton.addEventListener("click", (e) => {
-                e.stopPropagation(); // Prevent triggering parent click events
-                div.remove();
-            });
-        }
-    });
+  card._widthAnim = { raf: requestAnimationFrame(step) };
 }
 
-clearButton.addEventListener("click", () => {
-    filesToUpload = []; // Clear the files array
-    fileDisplay.innerHTML = ""; // Clear the preview
-    console.log("Cleared all files");
+// convert percent to pixels relative to container width
+function pxFromPercent(container, percent) {
+  return Math.round(container.clientWidth * (percent / 100));
+}
+
+// check center line and trigger animation
+function checkCardCenterLineJS() {
+  const centerY = window.innerHeight / 2;
+
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    // target percent depends on whether intersects center line
+    const intersectsCenter = rect.top < centerY && rect.bottom > centerY;
+
+    // choose target percent (80% -> 100%)
+    const targetPercent = intersectsCenter ? 100 : 80;
+
+    // convert to pixels relative to the card's flex container (.project-grid)
+    // fall back to document.body if parent can't be used
+    const container = card.parentElement || document.body;
+    const targetPx = pxFromPercent(container, targetPercent);
+
+    // Kick off animation only if target differs significantly
+    const currentPx = rect.width;
+    if (Math.abs(currentPx - targetPx) > 1) { // tolerance to avoid micro animations
+      animateWidthTo(card, targetPx, DURATION);
+    }
+  });
+}
+
+// throttle with rAF
+let ticking = false;
+function onScrollOrResize() {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      checkCardCenterLineJS();
+      ticking = false;
+    });
+    ticking = true;
+  }
+}
+
+// Run initially (after load) and on scroll/resize
+window.addEventListener('load', () => {
+  // ensure box-sizing (helps consistent sizing)
+  document.documentElement.style.boxSizing = 'border-box';
+  document.body.style.boxSizing = 'border-box';
+  checkCardCenterLineJS();
 });
+window.addEventListener('scroll', onScrollOrResize, { passive: true });
+window.addEventListener('resize', onScrollOrResize);
+
+
