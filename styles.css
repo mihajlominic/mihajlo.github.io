@@ -623,4 +623,7 @@ footer {
     .project-content {
         max-width: 300px;   /* ← adjust to your preferred text width */
     }
+    .container {
+        padding: 0 .5rem;
+    }
 }
