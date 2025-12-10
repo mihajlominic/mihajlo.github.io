@@ -323,6 +323,20 @@ nav a:hover {
     width: 80%;
 }
 
+.project-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(9, 9, 11, 0.95), rgba(9, 9, 11, 0.2));
+}
+
+.project-content {
+    max-width: 600px;   /* ← adjust to your preferred text width */
+    width: 100%;
+}
+
 
 /* Project Card Visuals */
 .project-card[data-project="Nova"] {
@@ -568,6 +582,10 @@ footer {
         justify-content: center;
         gap: 2rem;
     }
+
+    .project-content {
+        max-width: 400px;   /* ← adjust to your preferred text width */
+    }
 }
 
 @media (max-width: 768px) {
@@ -598,5 +616,11 @@ footer {
     .stats-grid {
         flex-direction: column;
         gap: 2rem;
+    }
+    .project-overlay {
+        padding: 10px; /* Adjust height for smaller screens */
+    }
+    .project-content {
+        max-width: 300px;   /* ← adjust to your preferred text width */
     }
 }
