@@ -506,7 +506,7 @@ nav a:hover {
     width: 500px; /* Larger blobs */
     height: 500px;
     border-radius: 50%;
-    opacity: 0.5;
+    opacity: 0.9;
     transition: transform 10s ease-out;
 }
 

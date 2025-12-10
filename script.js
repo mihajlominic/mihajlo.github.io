@@ -23,22 +23,73 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(fader);
     });
 
-    // --- 3. Parallax Movement for Background Blobs ---
-    // Moves the background blobs slightly as the user scrolls
-    const blobContainer = document.querySelector('.blob-container');
-    const blobs = document.querySelectorAll('.blob');
-    const parallaxIntensity = 0.05;
+const blobContainer = document.querySelector('.blob-container');
+const blobs = document.querySelectorAll('.blob');
+const parallaxIntensity = 0.05;
 
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
+let containerRect;
 
-        blobContainer.style.transform = `translateY(${scrollY * -parallaxIntensity}px)`;
+// Update container size
+function updateContainer() {
+    containerRect = blobContainer.getBoundingClientRect();
+}
+updateContainer();
+window.addEventListener('resize', updateContainer);
 
-        blobs.forEach((blob, index) => {
-            const depth = (index + 1) * 0.1; 
-            blob.style.transform = `translateY(${scrollY * depth * 0.5}px)`;
-        });
+// SCROLL PARALLAX
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    blobContainer.style.transform = `translateY(${scrollY * -parallaxIntensity}px)`;
+
+    blobs.forEach((blob, index) => {
+        blob.dataset.parallaxY = scrollY * (index + 1) * 0.05;
     });
+});
+
+// FREE FLOATING BLOB POSITIONS
+const blobData = Array.from(blobs).map((blob, i) => ({
+    x: Math.random() * 300,
+    y: Math.random() * 300,
+    angle: Math.random() * Math.PI * 2,
+    speed: 1 + Math.random() * 10005.5, // FASTER
+    turnSpeed: 0.02 + Math.random() * 0.03, // smooth turning
+    amplitude: 40 + Math.random() * 60 // how far it swings each curve
+}));
+
+function animate() {
+    blobData.forEach((data, i) => {
+        const blob = blobs[i];
+
+        // Move forward
+        data.x += Math.cos(data.angle) * data.speed;
+        data.y += Math.sin(data.angle) * data.speed;
+
+        // Smooth direction change
+        data.angle += (Math.random() - 0.5) * data.turnSpeed;
+
+        // Keep blobs inside the container
+        if (data.x < 0 || data.x > containerRect.width - blob.offsetWidth) {
+            data.angle = Math.PI - data.angle;
+        }
+        if (data.y < 0 || data.y > containerRect.height - blob.offsetHeight) {
+            data.angle = -data.angle;
+        }
+
+        // Apply movement + parallax
+        blob.style.transform = `
+            translate(
+                ${data.x}px,
+                ${data.y + (parseFloat(blob.dataset.parallaxY) || 0)}px
+            )
+        `;
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+
 
 });
 
