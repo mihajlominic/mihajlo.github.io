@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const appearOptions = {
         threshold: 0,
-        rootMargin: "0px 0px -200px 0px" // Start fade-in 100px before reaching viewport bottom
+        rootMargin: "0px 0px -100px 0px" // Start fade-in 100px before reaching viewport bottom
     };
 
     const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
