@@ -192,3 +192,79 @@ window.addEventListener('scroll', onScrollOrResize, { passive: true });
 window.addEventListener('resize', onScrollOrResize);
 
 
+const convertCard = document.querySelector('.project-card[data-project="convert"]');
+const convertVideo = convertCard.querySelector('.bg-video');
+
+convertCard.addEventListener('mouseenter', () => {
+    convertVideo.style.opacity = "1";
+    convertVideo.play();
+});
+
+convertCard.addEventListener('mouseleave', () => {
+    convertVideo.style.opacity = "0";
+    convertVideo.pause();
+    convertVideo.currentTime = 0;
+});
+
+const instanCard = document.querySelector('.project-card[data-project="instan"]');
+const instanVideo = instanCard.querySelector('.bg-video');
+
+instanCard.addEventListener('mouseenter', () => {
+    instanVideo.style.opacity = "1";
+    instanVideo.play();
+});
+
+instanCard.addEventListener('mouseleave', () => {
+    instanVideo.style.opacity = "0";
+    instanVideo.pause();
+    instanVideo.currentTime = 0;
+});
+
+const words = ["experiences.", "platforms.", "solutions.", "interfaces.", "products."];
+const wordElement = document.getElementById("dynamic-word");
+
+let wordIndex = 0;
+let charIndex = 0;
+let typing = true;
+let speed = 70;   // typing/deleting speed in ms
+let pause = 2500;  // pause at full word
+
+function typeWord() {
+    const currentWord = words[wordIndex];
+
+    // remove blinking while typing/deleting
+    wordElement.classList.remove('blink');
+
+    if (typing) {
+        wordElement.textContent = currentWord.slice(0, charIndex + 1);
+        charIndex++;
+
+        if (charIndex === currentWord.length) {
+            typing = false;
+            // start blinking while paused
+            wordElement.classList.add('blink');
+            setTimeout(typeWord, pause);
+            return;
+        }
+    } else {
+        wordElement.textContent = currentWord.slice(0, charIndex - 1);
+        charIndex--;
+
+        if (charIndex === 0) {
+            typing = true;
+            wordIndex = (wordIndex + 1) % words.length;
+            // optional: add short pause with blinking at empty
+            wordElement.classList.add('blink');
+            setTimeout(typeWord, 300);
+            return;
+        }
+    }
+
+    setTimeout(typeWord, speed);
+}
+
+typeWord();
+
+
+
+
