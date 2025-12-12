@@ -93,6 +93,9 @@ animate();
 
 });
 
+
+
+
 // ------------------------------
 // JS: artificial width animation
 // ------------------------------
@@ -163,8 +166,23 @@ function checkCardCenterLineJS() {
 
     // Kick off animation only if target differs significantly
     const currentPx = rect.width;
+
+    const video = card.querySelector('.bg-video');
     if (Math.abs(currentPx - targetPx) > 1) { // tolerance to avoid micro animations
       animateWidthTo(card, targetPx, DURATION);
+    }
+
+    if (video) {
+        if (intersectsCenter) {
+            // Card is stretched → PLAY video
+            video.style.opacity = "1";
+            video.play();
+        } else {
+            // Card is collapsed → STOP video
+            video.style.opacity = "0";
+            video.pause();
+            video.currentTime = 0;
+        }
     }
   });
 }
@@ -192,33 +210,38 @@ window.addEventListener('scroll', onScrollOrResize, { passive: true });
 window.addEventListener('resize', onScrollOrResize);
 
 
-const convertCard = document.querySelector('.project-card[data-project="convert"]');
-const convertVideo = convertCard.querySelector('.bg-video');
 
-convertCard.addEventListener('mouseenter', () => {
-    convertVideo.style.opacity = "1";
-    convertVideo.play();
-});
 
-convertCard.addEventListener('mouseleave', () => {
-    convertVideo.style.opacity = "0";
-    convertVideo.pause();
-    convertVideo.currentTime = 0;
-});
 
-const instanCard = document.querySelector('.project-card[data-project="instan"]');
-const instanVideo = instanCard.querySelector('.bg-video');
+// const convertCard = document.querySelector('.project-card[data-project="convert"]');
+// const convertVideo = convertCard.querySelector('.bg-video');
 
-instanCard.addEventListener('mouseenter', () => {
-    instanVideo.style.opacity = "1";
-    instanVideo.play();
-});
+// convertCard.addEventListener('mouseenter', () => {
+//     convertVideo.style.opacity = "1";
+//     convertVideo.play();
+//     convertCard.querySelector('.project-overlay').style.opacity = "0";
+// });
 
-instanCard.addEventListener('mouseleave', () => {
-    instanVideo.style.opacity = "0";
-    instanVideo.pause();
-    instanVideo.currentTime = 0;
-});
+// convertCard.addEventListener('mouseleave', () => {
+//     convertVideo.style.opacity = "0";
+//     convertVideo.pause();
+//     convertVideo.currentTime = 0;
+//     convertCard.querySelector('.project-overlay').style.opacity = "1";
+// });
+
+// const instanCard = document.querySelector('.project-card[data-project="instan"]');
+// const instanVideo = instanCard.querySelector('.bg-video');
+
+// instanCard.addEventListener('mouseenter', () => {
+//     instanVideo.style.opacity = "1";
+//     instanVideo.play();
+// });
+
+// instanCard.addEventListener('mouseleave', () => {
+//     instanVideo.style.opacity = "0";
+//     instanVideo.pause();
+//     instanVideo.currentTime = 0;
+// });
 
 const words = ["experiences.", "platforms.", "solutions.", "interfaces.", "products."];
 const wordElement = document.getElementById("dynamic-word");
