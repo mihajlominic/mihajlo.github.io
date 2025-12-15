@@ -172,7 +172,13 @@ nav a:hover {
     /* transition: opacity 0.5s ease, transform 0.5s ease; */
 }
 
-.highlight::after {
+.service-grid .highlight{
+    margin-right: 7px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.headline .highlight::after {
     content: '';
     position: absolute;
     right: 0px;      /* a little space after text */
@@ -402,17 +408,6 @@ nav a:hover {
     width: 100%;
 }
 
-
-/* Project Card Visuals */
-.project-card[data-project="Nova"] {
-    /* Subtle geometric pattern with a neon glow effect */
-    background: #000000 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a0833"/><path d="M 0 0 L 100 100 M 100 0 L 0 100" stroke="%237c3aed" stroke-width="0.5" opacity="0.1"/><circle cx="50" cy="50" r="15" fill="%237c3aed" opacity="0.2"/><text x="50" y="55" font-family="Inter" font-size="8" fill="%23f9f9fb" text-anchor="middle" font-weight="700">NOVA</text></svg>') center / cover;
-}
-.project-card[data-project="Ascend"] {
-    /* Dark background with a corporate, data-driven look */
-    background: #000000 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230c0c0e"/><rect x="15" y="60" width="70" height="10" fill="%230e7490" opacity="0.5"/><rect x="15" y="45" width="50" height="10" fill="%230e7490" opacity="0.3"/><rect x="15" y="30" width="80" height="10" fill="%230e7490" opacity="0.8"/><text x="50" y="20" font-family="Inter" font-size="8" fill="%23f9f9fb" text-anchor="middle" font-weight="700">ASCEND</text></svg>') center / cover;
-}
-
 .project-card[data-project="convert"] {
     /* Dark background with a corporate, data-driven look */
     background: #000000 url('./images/convert/convert_banner.webp') center / cover;
@@ -434,6 +429,20 @@ nav a:hover {
     background-position: right;
 }
 
+.project-card[data-project="rtgstudio"] {
+    /* Dark background with a corporate, data-driven look */
+    background: #000000 url('./images/rtgstudio/rtgstudio.png') center / cover;
+    background-size: cover;
+    background-position: right;
+}
+
+.project-card[data-project="mojamara"] {
+    /* Dark background with a corporate, data-driven look */
+    background: #000000 url('./images/mojamara/mojamara.png') center / cover;
+    background-size: cover;
+    background-position: right;
+}
+
 .project-overlay {
     position: absolute;
     bottom: 0;
@@ -449,6 +458,12 @@ nav a:hover {
     background: linear-gradient(to top, rgba(9, 9, 11, 0.98), rgba(9, 9, 11, 0.4));
 }
 
+.link-tag-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .project-tag {
     display: inline-block;
     color: var(--highlight-color);
@@ -457,7 +472,8 @@ nav a:hover {
     border-radius: 50px;
     font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 0.75rem;
+    position: relative;
+    right: 0;
 }
 
 .project-overlay h4 {
@@ -674,13 +690,82 @@ nav a:hover {
 
 
 /* Footer */
-footer {
+/* footer {
     padding: 2rem 0;
     text-align: center;
     border-top: 1px solid var(--border-color);
     color: var(--text-secondary);
     font-size: 0.9rem;
+} */
+
+/* Footer layout */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr .8fr .5fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
 }
+
+.footer-col p {
+    margin: 0.4rem 0;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.footer-title {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+}
+
+/* Brand */
+.footer-logo {
+    display: inline-block;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+.footer-note {
+    color: var(--text-secondary);
+    max-width: 280px;
+}
+
+/* Navigation */
+.footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.footer-nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+    color: var(--text-primary);
+}
+
+/* Bottom bar */
+.footer-bottom {
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+}
+
+.footer-bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.footer-legal {
+    text-align: right;
+}
+
 
 /* --- Responsiveness --- */
 @media (max-width: 900px) {
@@ -694,6 +779,11 @@ footer {
 
     .project-content {
         max-width: 400px;   /* ← adjust to your preferred text width */
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
     }
 }
 
@@ -758,8 +848,42 @@ footer {
         font-size: 0.7rem;
     }
 
+    .project-logo {
+        width: 30px;
+        height: 30px;
+        top: .5rem;
+        right: .5rem;
+        padding: 5px;
+    }
+
+    .showVideoButton {
+        top: .5rem;
+        left: .5rem;
+    }
     .showVideoButton svg {
         width: 20px;
         height: 20px;
+    }
+    .project-grid {
+        gap: 1rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-note {
+        margin: 0 auto;
+    }
+
+    .footer-bottom-inner {
+        flex-direction: column;
+        gap: 0.6rem;
+        text-align: center;
+    }
+
+    .footer-legal {
+        text-align: center;
     }
 }

@@ -243,7 +243,7 @@ window.addEventListener('resize', onScrollOrResize);
 //     instanVideo.currentTime = 0;
 // });
 
-const words = ["experiences.", "platforms.", "solutions.", "interfaces.", "products."];
+let words = ["experiences.", "platforms.", "solutions.", "interfaces.", "products."];
 const wordElement = document.getElementById("dynamic-word");
 
 let wordIndex = 0;
@@ -254,6 +254,14 @@ let pause = 2500;  // pause at full word
 
 function typeWord() {
     const currentWord = words[wordIndex];
+
+    if (document.documentElement.lang === 'en') {
+        // English version
+        words = ["experiences.", "platforms.", "solutions.", "interfaces.", "products."];
+    } else {
+        // Serbian version
+        words = ["iskustva.", "platforme.", "rešenja.", "interfejse.", "proizvode."];
+    }
 
     // remove blinking while typing/deleting
     wordElement.classList.remove('blink');
