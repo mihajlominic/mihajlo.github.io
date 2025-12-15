@@ -410,9 +410,9 @@ nav a:hover {
 
 .project-card[data-project="convert"] {
     /* Dark background with a corporate, data-driven look */
-    background: #000000 url('./images/convert/convert_banner.webp') center / cover;
+    background: #000000 url('./images/convert/convert.png') center / cover;
     background-size: cover;
-    background-position: right;
+    background-position: center;
 }
 
 .project-card[data-project="instan"] {
