@@ -288,6 +288,30 @@ function typeWord() {
 
 typeWord();
 
+document.querySelectorAll('.project-card').forEach(card => {
+    const button = card.querySelector('.showVideoButton');
+    const overlay = card.querySelector('.project-overlay');
+    const video = card.querySelector('.bg-video');
+
+    if (!button || !overlay || !video) return;
+
+    let isVideoVisible = false;
+
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        isVideoVisible = !isVideoVisible;
+
+        if (isVideoVisible) {
+            // SHOW VIDEO
+            overlay.style.opacity = "0";
+        } else {
+            // SHOW OVERLAY
+            overlay.style.opacity = "1";
+        }
+    });
+});
+
 
 
 

@@ -351,7 +351,7 @@ nav a:hover {
     background-position: center;
     border-radius: var(--radius);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+    /* cursor: pointer; */
     transition: width 1s ease;
     width: 80%;
 }
@@ -442,7 +442,7 @@ nav a:hover {
     padding: 2rem;
     /* Soft black gradient for contrast */
     background: linear-gradient(to top, rgba(9, 9, 11, 0.95), rgba(9, 9, 11, 0.2));
-    transition: background 0.4s ease;
+    transition: all 0.4s ease;
 }
 
 .project-card:hover .project-overlay {
@@ -617,6 +617,29 @@ nav a:hover {
     animation: blob-move-3 18s infinite alternate;
 }
 
+.showVideoButton {
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.showVideoButton svg {
+    transition: transform 0.2s;
+    width: 50px;
+    height: 50px;
+}
+
+.showVideoButton:hover svg{
+    transform: scale(1.1);
+}
+
 @keyframes blob-move-1 {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(180px, 120px) scale(1.1); }
@@ -704,7 +727,7 @@ footer {
         gap: 2rem;
     }
     .project-card {
-        height: 300px;
+        height: 250px;
     }
     .project-overlay {
         padding: 10px; /* Adjust height for smaller screens */
@@ -733,5 +756,10 @@ footer {
     }
     .project-link {
         font-size: 0.7rem;
+    }
+
+    .showVideoButton svg {
+        width: 20px;
+        height: 20px;
     }
 }
